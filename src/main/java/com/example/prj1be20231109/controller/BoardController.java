@@ -49,4 +49,6 @@ public class BoardController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    //
 }
