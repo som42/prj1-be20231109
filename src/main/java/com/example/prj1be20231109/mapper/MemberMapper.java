@@ -9,20 +9,20 @@ import org.apache.ibatis.annotations.Select;
 public interface MemberMapper {
 
     @Insert("""
-            INSERT INTO member(id, password, email)
-            VALUES (#{id}, #{password}, #{email})
-            """)
+        INSERT INTO member (id, password, email)
+        VALUES (#{id}, #{password}, #{email})
+        """)
     int insert(Member member);
 
     @Select("""
-            SELECT id FROM member
-            WHERE id = #{id}
-            """)
+        SELECT id FROM member
+        WHERE id = #{id}
+        """)
     String selectId(String id);
 
     @Select("""
-            SELECT email FROM mamber
-            WHERE email = #{email}
-            """)
+        SELECT email FROM member
+        WHERE email = #{email}
+        """)
     String selectEmail(String email);
 }
