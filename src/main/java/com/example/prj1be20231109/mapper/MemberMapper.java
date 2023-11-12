@@ -19,4 +19,10 @@ public interface MemberMapper {
             WHERE id = #{id}
             """)
     String selectId(String id);
+
+    @Select("""
+            SELECT email FROM mamber
+            WHERE email = #{email}
+            """)
+    String selectEmail(String email);
 }
