@@ -14,35 +14,35 @@ import java.util.List;
 @RequestMapping("/api/board")
 public class BoardController {
 
-//    스프링이 주입해 돌라고 final로 만듬.
+    //    스프링이 주입해 돌라고 final로 만듬.
     private final BoardService service;
 
     @PostMapping("add")
-    public ResponseEntity add(@RequestBody Board board){
+    public ResponseEntity add(@RequestBody Board board) {
         if (!service.validete(board)) {
-          return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
 
-        if ( service.save(board)) {
+        if (service.save(board)) {
             return ResponseEntity.ok().build();
-        } else  {
+        } else {
             return ResponseEntity.internalServerError().build();
         }
     }
 
     @GetMapping("list")
-    public List<Board> list(){
+    public List<Board> list() {
         return service.list();
     }
 
     @GetMapping("id/{id}")
-    public Board get(@PathVariable Integer id){
+    public Board get(@PathVariable Integer id) {
         return service.get(id);
     }
 
     @DeleteMapping("remove/{id}")
-    public ResponseEntity remove(@PathVariable Integer id){
-        if (service.remove(id)){
+    public ResponseEntity remove(@PathVariable Integer id) {
+        if (service.remove(id)) {
             //잘됬으면 이거
             return ResponseEntity.ok().build();
         } else {
@@ -51,8 +51,16 @@ public class BoardController {
     }
 
     @PutMapping("edit")
-    public void edit(@RequestBody Board board) {
+    public ResponseEntity edit(@RequestBody Board board) {
 //        System.out.println("board = " + board);
-        service.update(board);
+        if (service.validete(board)) {
+            if (service.update(board)) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.internalServerError().build();
+            }
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
