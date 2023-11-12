@@ -50,5 +50,9 @@ public class BoardController {
         }
     }
 
-    //
+    @PutMapping("edit")
+    public void edit(@RequestBody Board board) {
+//        System.out.println("board = " + board);
+        service.update(board);
+    }
 }
