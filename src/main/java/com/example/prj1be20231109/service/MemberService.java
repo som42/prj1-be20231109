@@ -14,7 +14,7 @@ public class MemberService {
     private final MemberMapper mapper;
 
     public boolean add(Member member) {
-     return mapper.insert(member) == 1;
+        return mapper.insert(member) == 1;
     }
 
     public String getId(String id) {
@@ -27,16 +27,19 @@ public class MemberService {
     }
 
     public boolean validate(Member member) {
-        if (member == null){
+        if (member == null) {
             return false;
         }
-        if (member.getEmail().isBlank()){
+
+        if (member.getEmail().isBlank()) {
             return false;
         }
-        if (member.getPassword().isBlank()){
+
+        if (member.getPassword().isBlank()) {
             return false;
         }
-        if (member.getId().isBlank()){
+
+        if (member.getId().isBlank()) {
             return false;
         }
         return true;
@@ -50,6 +53,7 @@ public class MemberService {
         return mapper.selectById(id);
     }
 
+
     public boolean deleteMember(String id) {
         return mapper.deleteById(id) == 1;
     }
@@ -57,9 +61,15 @@ public class MemberService {
     public boolean update(Member member) {
 //        Member oldMember = mapper.selectById(member.getId());
 //
-//        if (member.getPassword().equals("")){
+//        if (member.getPassword().equals("")) {
 //            member.setPassword(oldMember.getPassword());
 //        }
+
         return mapper.update(member) == 1;
+
+    }
+
+    public String getNickName(String nickName) {
+        return mapper.selectNickName(nickName);
     }
 }

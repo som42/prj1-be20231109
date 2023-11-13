@@ -16,15 +16,15 @@ public class MemberController {
 
     @PostMapping("signup")
     public ResponseEntity signup(@RequestBody Member member) {
-     if (service.validate(member)){
-         if (service.add(member)) {
-             return ResponseEntity.ok().build();
-         } else {
-             return ResponseEntity.internalServerError().build();
-         }
-     } else {
-         return ResponseEntity.badRequest().build();
-     }
+        if (service.validate(member)) {
+            if (service.add(member)) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.internalServerError().build();
+            }
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping(value = "check", params = "id")
@@ -44,36 +44,48 @@ public class MemberController {
             return ResponseEntity.ok().build();
         }
     }
+
+    @GetMapping(value = "check", params = "nickName")
+    public ResponseEntity checkNickName(String nickName) {
+        if (service.getNickName(nickName) == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+
     @GetMapping("list")
-    public List<Member> list(){
+    public List<Member> list() {
         return service.list();
     }
 
     @GetMapping
-    public ResponseEntity<Member> view(String id){
+    public ResponseEntity<Member> view(String id) {
         // TODO : 로그인 했는 지? -> 안했으면 401
-        // TODO : 자기 정보 인지? -> 아니면 403
-      Member member = service.getMember(id);
+        // TODO : 자기 정보인지? -> 아니면 403
 
-      return ResponseEntity.ok(member);
+        Member member = service.getMember(id);
+
+        return ResponseEntity.ok(member);
     }
 
     @DeleteMapping
-//    삭제
-    public ResponseEntity delete(String id){
+    public ResponseEntity delete(String id) {
         // TODO : 로그인 했는 지? -> 안했으면 401
-        // TODO : 자기 정보 인지? -> 아니면 403
+        // TODO : 자기 정보인지? -> 아니면 403
 
         if (service.deleteMember(id)) {
             return ResponseEntity.ok().build();
         }
 
         return ResponseEntity.internalServerError().build();
+
     }
 
     @PutMapping("edit")
     public ResponseEntity edit(@RequestBody Member member) {
-        // TODO: 로그인 했는지? 자기정보 인지?
+        // TODO: 로그인 했는지? 자기정보인지?
+
         if (service.update(member)) {
             return ResponseEntity.ok().build();
         } else {

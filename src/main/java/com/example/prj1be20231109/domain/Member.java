@@ -1,7 +1,6 @@
 package com.example.prj1be20231109.domain;
 
 import lombok.Data;
-import org.apache.ibatis.annotations.Update;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +9,6 @@ public class Member {
     private String id;
     private String password;
     private String email;
+    private String nickName;
     private LocalDateTime inserted;
-
-
 }
