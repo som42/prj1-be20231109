@@ -20,6 +20,9 @@ public class MemberService {
     public String getId(String id) {
         return mapper.selectId(id);
     }
+    public String getNickname(String nickname) {
+        return mapper.selectNickname(nickname);
+    }
 
     public String getEmail(String email) {
         return mapper.selectEmail(email);
@@ -62,4 +65,5 @@ public class MemberService {
 //        }
         return mapper.update(member) == 1;
     }
+
 }

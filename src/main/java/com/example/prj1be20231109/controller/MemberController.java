@@ -44,6 +44,17 @@ public class MemberController {
             return ResponseEntity.ok().build();
         }
     }
+
+    @GetMapping(value = "check", params = "nickname")
+    public ResponseEntity checkNickname(String nickname){
+        if (service.getNickname(nickname) == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+
+
     @GetMapping("list")
     public List<Member> list(){
         return service.list();
