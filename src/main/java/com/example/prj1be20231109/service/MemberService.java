@@ -103,7 +103,22 @@ public class MemberService {
 
 
     public boolean hasAccess(String id, Member login) {
+        if (isAdmin(login)){
+            return true;
+        }
         // 지울려고 하는 id, 사용자 id가 같은지?
         return login.getId().equals(id);
+    }
+
+    public boolean isAdmin(Member login){
+        // 하나라도 admin 이라는게 있으면
+        if(login.getAuth() != null){
+            return login.getAuth()
+                    .stream()
+                    .map(e -> e.getName())
+                    .anyMatch(n -> n.equals("admin"));
+        }
+
+        return false;
     }
 }
