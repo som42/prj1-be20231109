@@ -4,6 +4,7 @@ import com.example.prj1be20231109.domain.Member;
 import com.example.prj1be20231109.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 
@@ -87,4 +88,6 @@ public class MemberService {
       }
       return false;
     }
+
+
 }
