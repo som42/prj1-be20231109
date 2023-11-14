@@ -95,7 +95,15 @@ public class MemberController {
     }
 
     @PutMapping("edit")
-    public ResponseEntity edit(@RequestBody Member member) {
+    public ResponseEntity edit(@RequestBody Member member,
+                               @SessionAttribute(value = "login", required = false)Member login) {
+        if (login == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //401
+        }
+        if (!service.hasAccess(member.getId(), login)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); //403
+        }
+
         // TODO: 로그인 했는지? 자기정보인지?
 
         if (service.update(member)) {
