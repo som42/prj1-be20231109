@@ -9,6 +9,6 @@ public class Board {
     private String title;
     private String content;
     private String writer;
-    private String id;
+    private Integer id;
     private LocalDateTime inserted;
 }

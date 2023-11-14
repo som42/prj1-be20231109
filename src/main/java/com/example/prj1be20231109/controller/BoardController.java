@@ -52,6 +52,7 @@ public class BoardController {
     @DeleteMapping("remove/{id}")
     public ResponseEntity remove(@PathVariable Integer id,
                                  @SessionAttribute(value = "login", required = false) Member login) {
+//        로그아웃때 삭제 할려구 할때 아에 권한이 없다.
         if (login == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401
         }
@@ -69,7 +70,15 @@ public class BoardController {
     }
 
     @PutMapping("edit")
-    public ResponseEntity edit(@RequestBody Board board) {
+    public ResponseEntity edit(@RequestBody Board board,
+                               @SessionAttribute(value = "login", required = false) Member login) {
+        if (login == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if (!service.hasAccess(board.getId(),login)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
 //        System.out.println("board = " + board);
         if (service.validete(board)) {
             if (service.update(board)) {
