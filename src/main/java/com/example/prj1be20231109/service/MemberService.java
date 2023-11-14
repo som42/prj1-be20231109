@@ -90,4 +90,8 @@ public class MemberService {
     }
 
 
+    public boolean hasAccess(String id, Member login) {
+        // 지울려고 하는 id, 사용자 id가 같은지?
+        return login.getId().equals(id);
+    }
 }
