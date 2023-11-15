@@ -44,8 +44,22 @@ public class CommentController {
     }
 
     @DeleteMapping("{id}")
-    public void remove(@PathVariable Integer id){
-        // TODO : 권한 검증
+//    댓글 삭제 하기.
+    public ResponseEntity<Object> remove(@PathVariable Integer id,
+                                         @SessionAttribute(value = "login", required = false)Member login){
+        // 어드민 안하고 자기 댓글만 삭제하게 함.
+        if (login == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if (service.hasAccess(id, login)) {
+           if( service.remove(id)){
+               return ResponseEntity.ok().build();
+           }else {
+               return ResponseEntity.internalServerError().build();
+           }
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 
         service.remove(id);
     }
