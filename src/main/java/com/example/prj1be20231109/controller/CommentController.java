@@ -4,6 +4,7 @@ import com.example.prj1be20231109.domain.Comment;
 import com.example.prj1be20231109.domain.Member;
 import com.example.prj1be20231109.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +64,22 @@ public class CommentController {
     }
 
     @PutMapping("edit")
-    public void update(@RequestBody Comment comment){
-        service.update(comment);
+    public ResponseEntity update(@RequestBody Comment comment,
+                       @SessionAttribute(value="login", required = false)Member login){
+        if (login == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if (service.hasAccess(comment.getId(),login)){
+            if (!service.updateValidate(comment)){
+                return ResponseEntity.badRequest().build();
+            }
+            if (service.update(comment)){
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.internalServerError().build();
+            }
+        }else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 }
