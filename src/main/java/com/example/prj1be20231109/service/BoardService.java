@@ -44,6 +44,7 @@ public class BoardService {
     }
 
     public boolean remove(Integer id) {
+
         return mapper.deleteById(id) == 1;
     }
 
@@ -59,6 +60,7 @@ public class BoardService {
 
         return board.getWriter().equals(login.getId());
     }
+
 
 
 }
