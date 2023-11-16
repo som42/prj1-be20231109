@@ -28,7 +28,7 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401번 로그인 안하면
         }
 
-        if (!service.validete(board)) {
+        if (!service.validate(board)) {
             return ResponseEntity.badRequest().build(); // 400번 클라이언트가 요청이 잘못되었을때
         }
 
@@ -80,7 +80,7 @@ public class BoardController {
         }
 
 //        System.out.println("board = " + board);
-        if (service.validete(board)) {
+        if (service.validate(board)) {
             if (service.update(board)) {
                 return ResponseEntity.ok().build();
             } else {

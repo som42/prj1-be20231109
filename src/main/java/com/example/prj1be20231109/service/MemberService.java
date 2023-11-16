@@ -3,7 +3,9 @@ package com.example.prj1be20231109.service;
 import com.example.prj1be20231109.domain.Auth;
 import com.example.prj1be20231109.domain.Member;
 import com.example.prj1be20231109.mapper.BoardMapper;
+import com.example.prj1be20231109.mapper.CommentMapper;
 import com.example.prj1be20231109.mapper.MemberMapper;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +17,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-//서비스는 여러 매퍼를 쓸수 있다.
+
     private final MemberMapper mapper;
-    private final BoardMapper boardmapper;
+    private final BoardMapper boardMapper;
+    private final CommentMapper commentMapper;
+    private final BoardService boardService;
 
     public boolean add(Member member) {
         return mapper.insert(member) == 1;
@@ -61,9 +65,18 @@ public class MemberService {
 
 
     public boolean deleteMember(String id) {
-        // 1. 이 멤버가 작성한 게시물 삭제
-        boardmapper.deleteByWriter(id);
-        // 2. 이 멤버 삭제
+        // 이 멤버가 작성한 댓글 삭제
+        commentMapper.deleteByMemberId(id);
+
+        // 이 멤버가 작성한 게시물 삭제
+
+        //   이 멤버가 작성한 게시물 번호들 조회
+        List<Integer> boardIdList = boardMapper.selectIdListByMemberId(id);
+
+        //   게시물 번호들 loop 각 게시물 삭제(boardService.remove)
+        boardIdList.forEach((boardId) -> boardService.remove(boardId));
+
+        // 이 멤버 삭제
 
         return mapper.deleteById(id) == 1;
     }
@@ -84,35 +97,35 @@ public class MemberService {
     }
 
     public boolean login(Member member, WebRequest request) {
-      Member dbMember = mapper.selectById(member.getId());
+        Member dbMember = mapper.selectById(member.getId());
 
 
-      if (dbMember != null) {
-          if (dbMember.getPassword().equals(member.getPassword())){
+        if (dbMember != null) {
+            if (dbMember.getPassword().equals(member.getPassword())) {
 
-              List<Auth> auth =mapper.selectAuthById(member.getId());
-              dbMember.setAuth(auth);
+                List<Auth> auth = mapper.selectAuthById(member.getId());
+                dbMember.setAuth(auth);
 
-              dbMember.setPassword("");
-              request.setAttribute("login", dbMember, RequestAttributes.SCOPE_SESSION);
-              return true;
-          }
-      }
-      return false;
+                dbMember.setPassword("");
+                request.setAttribute("login", dbMember, RequestAttributes.SCOPE_SESSION);
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
     public boolean hasAccess(String id, Member login) {
-        if (isAdmin(login)){
+        if (isAdmin(login)) {
             return true;
         }
-        // 지울려고 하는 id, 사용자 id가 같은지?
+
         return login.getId().equals(id);
     }
 
-    public boolean isAdmin(Member login){
-        // 하나라도 admin 이라는게 있으면
-        if(login.getAuth() != null){
+    public boolean isAdmin(Member login) {
+        if (login.getAuth() != null) {
             return login.getAuth()
                     .stream()
                     .map(e -> e.getName())

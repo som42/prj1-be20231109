@@ -13,7 +13,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
 
-    private final MemberService memberService;
     private final BoardMapper mapper;
     private final CommentMapper commentMapper;
 
@@ -23,17 +22,19 @@ public class BoardService {
         return mapper.insert(board) == 1;
     }
 
-    public boolean validete(Board board) {
-        if (board == null){
-            return false;
-        }
-        if (board.getContent() == null || board.getContent().isBlank()){
+    public boolean validate(Board board) {
+        if (board == null) {
             return false;
         }
 
-        if (board.getContent() ==  null || board.getTitle().isBlank()){
+        if (board.getContent() == null || board.getContent().isBlank()) {
             return false;
         }
+
+        if (board.getTitle() == null || board.getTitle().isBlank()) {
+            return false;
+        }
+
         return true;
     }
 
@@ -42,13 +43,11 @@ public class BoardService {
     }
 
     public Board get(Integer id) {
-        // 1. 게시물에 달린 댓글들 지우기
-        commentMapper.deleteByBoardId(id);
-
         return mapper.selectById(id);
     }
 
     public boolean remove(Integer id) {
+        commentMapper.deleteByBoardId(id);
         return mapper.deleteById(id) == 1;
     }
 
@@ -57,13 +56,18 @@ public class BoardService {
     }
 
     public boolean hasAccess(Integer id, Member login) {
-        if (memberService.isAdmin(login)){
+
+        if (login == null){
+            return false;
+        }
+
+        if (login.isAdmin()){
             return true;
         }
+
         Board board = mapper.selectById(id);
 
         return board.getWriter().equals(login.getId());
     }
-
 
 }
