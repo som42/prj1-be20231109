@@ -20,7 +20,7 @@ public interface BoardMapper {
               b.writer,
               m.nickName,
               b.inserted,
-          COUNT(c.id) commentComment
+          COUNT(c.id) countComment
         FROM board b JOIN member m ON b.writer = m. id
                 LEFT JOIN comment c ON b.id = c.boardId
         GROUP BY b.id
