@@ -60,7 +60,10 @@ public class CommentController {
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+    }
 
-        service.remove(id);
+    @PutMapping("edit")
+    public void update(@RequestBody Comment comment){
+        service.update(comment);
     }
 }

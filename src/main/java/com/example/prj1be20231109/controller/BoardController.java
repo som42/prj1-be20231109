@@ -25,17 +25,17 @@ public class BoardController {
         System.out.println("login = " + login);
 
         if (login ==  null){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401번 로그인 안하면
         }
 
         if (!service.validete(board)) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build(); // 400번 클라이언트가 요청이 잘못되었을때
         }
 
         if (service.save(board, login)) {
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().build(); // 500번 서버문제
         }
     }
 
@@ -50,22 +50,22 @@ public class BoardController {
     }
 
     @DeleteMapping("remove/{id}")
-    public ResponseEntity remove(@PathVariable Integer id,
+    public ResponseEntity<String> remove(@PathVariable Integer id,
                                  @SessionAttribute(value = "login", required = false) Member login) {
 //        로그아웃때 삭제 할려구 할때 아에 권한이 없다.
         if (login == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401 로그인안했을때
         }
 //        니가 누군지 알지만 권한이 없다.
         if (!service.hasAccess(id, login)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // 403
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // 403 권한없을때
         }
 
         if (service.remove(id)) {
             //잘됬으면 이거
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().build(); // 서버문제
         }
     }
 
