@@ -12,7 +12,8 @@ public interface BoardMapper {
             INSERT INTO board (title, content, writer)
             VALUES (#{title}, #{content}, #{writer})
             """)
-    int insert(Board board);
+    int insert(Board board); //insert 왠만하면 타입을 int로
+
 
     @Select("""
        SELECT b.id,

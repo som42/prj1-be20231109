@@ -12,14 +12,16 @@ import java.util.List;
 
 
 @RestController
-@RequiredArgsConstructor
+@RequiredArgsConstructor //주의 받을게 있으면
 @RequestMapping("/api/board")
 public class BoardController {
 
     //    스프링이 주입해 돌라고 final로 만듬.
     private final BoardService service;
 
+    //post 방식으로 /api/board는 클래스 레벨에 적어놨으니 add만 적어 주면 된다.
     @PostMapping("add")
+//    응답 코드를 줄 수 있는 ResponseEntity 을 썼다.
     public ResponseEntity add(@RequestBody Board board,
                               @SessionAttribute(value = "login", required = false) Member login) {
         System.out.println("login = " + login);
@@ -28,12 +30,12 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401번 로그인 안하면
         }
 
-        if (!service.validate(board)) {
+        if (!service.validate(board)) { // 우리가 원하는 값이 잘들어와 있는지 서비스에 검증해보자이
             return ResponseEntity.badRequest().build(); // 400번 클라이언트가 요청이 잘못되었을때
         }
 
         if (service.save(board, login)) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().build(); // 글이 저장이 잘됬으면
         } else {
             return ResponseEntity.internalServerError().build(); // 500번 서버문제
         }
