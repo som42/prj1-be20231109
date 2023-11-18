@@ -1,10 +1,7 @@
 package com.example.prj1be20231109.mapper;
 
 import com.example.prj1be20231109.domain.Like;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface LikeMapper {
@@ -34,5 +31,6 @@ public interface LikeMapper {
                 boardId = #{boardId}
             AND memberId = #{memberId}   
         """)
-    Like selectByBoardIdAndMemberId(Integer boardId, String memberId);
+    Like selectByBoardIdAndMemberId(@Param("boardId") Integer boardId, @Param("memberId") String memberId);
+//     Like selectByBoardIdAndMemberId(Integer boardId, String memberId);
 }
