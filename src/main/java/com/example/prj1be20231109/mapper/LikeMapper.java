@@ -5,17 +5,16 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.context.annotation.ImportRuntimeHints;
 
 @Mapper
 public interface LikeMapper {
-
     @Delete("""
-            DELETE FROM boardLike
-            WHERE boardId =#{boardId}
-            AND memberId = #{memberId}
-            """)
-        int delete(Like like);
+        DELETE FROM boardLike
+        WHERE boardId = #{boardId}
+          AND memberId = #{memberId}
+        """)
+    int delete(Like like);
+
     @Insert("""
         INSERT INTO boardLike (boardId, memberId)
         VALUES (#{boardId}, #{memberId})
@@ -23,9 +22,17 @@ public interface LikeMapper {
     int insert(Like like);
 
     @Select("""
-            SELECT COUNT(id)
-            FROM boardLike
-            WHERE boardId = #{boardId}
-            """)
+        SELECT COUNT(id) FROM boardLike
+        WHERE boardId = #{boardId}
+        """)
     int countByBoardId(Integer boardId);
+
+    @Select("""
+        SELECT * 
+        FROM boardLike
+        WHERE 
+                boardId = #{boardId}
+            AND memberId = #{memberId}   
+        """)
+    Like selectByBoardIdAndMemberId(Integer boardId, String memberId);
 }
