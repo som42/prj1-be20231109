@@ -48,13 +48,13 @@ public class BoardService {
         Map<String, Object> pageInfo = new HashMap<>();
 
         int countAll = mapper.countAll();
-        int lastPageNumber = (countAll / -1) / 10 + 1;
+        int lastPageNumber = (countAll - 1) / 10 + 1;
         int startPageNumber = (page - 1) / 10 * 10 + 1;
         int endPageNumber = startPageNumber + 9;
         endPageNumber = Math.min(endPageNumber, lastPageNumber);
 
         pageInfo.put("startPageNumber", startPageNumber);
-        pageInfo.put("lastPageNumber", lastPageNumber);
+        pageInfo.put("endPageNumber", endPageNumber);
 
         int from = (page - 1) * 10;
         map.put("boardList", mapper.selectAll(from));
