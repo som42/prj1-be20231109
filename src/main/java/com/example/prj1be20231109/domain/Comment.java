@@ -9,7 +9,7 @@ public class Comment {
     private Integer id;
     private Integer boardId;
     private String memberId;
+    private String memberNickName;
     private String comment;
     private LocalDateTime inserted;
-    private String memberNickName;
 }
