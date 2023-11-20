@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.font.MultipleMaster;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +25,8 @@ public class BoardController {
     //post 방식으로 /api/board는 클래스 레벨에 적어놨으니 add만 적어 주면 된다.
     @PostMapping("add")
 //    응답 코드를 줄 수 있는 ResponseEntity 을 썼다.
-    public ResponseEntity add(@RequestBody Board board,
+    public ResponseEntity add (Board board,
+                              @RequestParam(value = "file", required = false) MultipartFile file,
                               @SessionAttribute(value = "login", required = false) Member login) {
         System.out.println("login = " + login);
 
