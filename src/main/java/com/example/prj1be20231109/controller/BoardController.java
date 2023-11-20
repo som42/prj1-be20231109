@@ -26,9 +26,14 @@ public class BoardController {
     @PostMapping("add")
 //    응답 코드를 줄 수 있는 ResponseEntity 을 썼다.
     public ResponseEntity add (Board board,
-                              @RequestParam(value = "file", required = false) MultipartFile file,
+                              @RequestParam(value = "files[]", required = false) MultipartFile[] files,
                               @SessionAttribute(value = "login", required = false) Member login) {
-        System.out.println("login = " + login);
+       if (files != null){
+           for (int i = 0; i < files.length; i ++) {
+               System.out.println("frle = " + files[i].getOriginalFilename());
+               System.out.println("files = " + files[i].getSize());
+           }
+       }
 
         if (login ==  null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401번 로그인 안하면
