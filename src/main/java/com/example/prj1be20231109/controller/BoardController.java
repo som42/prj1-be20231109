@@ -28,12 +28,6 @@ public class BoardController {
     public ResponseEntity add (Board board,
                               @RequestParam(value = "files[]", required = false) MultipartFile[] files,
                               @SessionAttribute(value = "login", required = false) Member login) {
-       if (files != null){
-           for (int i = 0; i < files.length; i ++) {
-               System.out.println("frle = " + files[i].getOriginalFilename());
-               System.out.println("files = " + files[i].getSize());
-           }
-       }
 
         if (login ==  null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401번 로그인 안하면
@@ -43,7 +37,7 @@ public class BoardController {
             return ResponseEntity.badRequest().build(); // 400번 클라이언트가 요청이 잘못되었을때
         }
 
-        if (service.save(board, login)) {
+        if (service.save(board, files, login)) {
             return ResponseEntity.ok().build(); // 글이 저장이 잘됬으면
         } else {
             return ResponseEntity.internalServerError().build(); // 500번 서버문제
