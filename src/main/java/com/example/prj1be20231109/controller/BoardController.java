@@ -27,7 +27,7 @@ public class BoardController {
     @PostMapping("add")
 //    응답 코드를 줄 수 있는 ResponseEntity 을 썼다.
     public ResponseEntity add (Board board,
-                              @RequestParam(value = "files[]", required = false) MultipartFile[] files,
+                              @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
                               @SessionAttribute(value = "login", required = false) Member login) throws IOException {
 
         if (login ==  null){
