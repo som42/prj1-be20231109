@@ -84,11 +84,8 @@ public class BoardController {
     public ResponseEntity edit(Board board,
                                @RequestParam(value = "removeFileIds[]", required = false)List<Integer> removeFileIds,
                                @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] uploadFiles,
-                               @SessionAttribute(value = "login", required = false) Member login) {
+                               @SessionAttribute(value = "login", required = false) Member login) throws IOException {
 
-        System.out.println("board = " + board);
-        System.out.println("removeFileIds = " + removeFileIds);
-        System.out.println("uploadFiles = " + uploadFiles);
 
         if (login == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -99,7 +96,8 @@ public class BoardController {
 
 //        System.out.println("board = " + board);
         if (service.validate(board)) {
-            if (service.update(board)) {
+//            업데이트 할때 같이 넣어주기
+            if (service.update(board, removeFileIds, uploadFiles)) {
                 return ResponseEntity.ok().build();
             } else {
                 return ResponseEntity.internalServerError().build();
