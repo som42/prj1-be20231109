@@ -17,7 +17,8 @@ public interface BoardMapper {
 
 
     @Select("""
-            SELECT b.id,
+        <script>
+        SELECT b.id,
                b.title,
                b.writer,
                m.nickName,
@@ -25,17 +26,25 @@ public interface BoardMapper {
                COUNT(DISTINCT c.id) countComment,
                COUNT(DISTINCT l.id) countLike,
                COUNT(DISTINCT f.id) countFile
-            FROM board b JOIN member m ON b.writer = m. id
+        FROM board b JOIN member m ON b.writer = m.id
                      LEFT JOIN comment c ON b.id = c.boardId
                      LEFT JOIN boardLike l ON b.id = l.boardId
                      LEFT JOIN boardFile f ON b.id = f.boardId
-            WHERE b.content LIKE '%%'
-                OR b.title LIKE '%%'
-            GROUP BY b.id
-            ORDER BY b.id DESC
-            LIMIT 0,10;
-          """)
-    List<Board> selectAll(Integer from, String keyword);
+        WHERE 
+            <trim prefixOverrides="OR">
+                <if test="category == 'all' or category == 'title'">
+                    OR title LIKE #{keyword}
+                </if>
+                <if test="category == 'all' or category == 'content'">
+                    OR content LIKE #{keyword}
+                </if>
+            </trim>
+        GROUP BY b.id
+        ORDER BY b.id DESC
+        LIMIT #{from}, 10
+        </script>
+        """)
+    List<Board> selectAll(Integer from, String keyword, String category);
 
     @Select("""
             SELECT b.id, 
@@ -59,7 +68,7 @@ public interface BoardMapper {
     @Update("""
             UPDATE board
             SET title = #{title},
-                content = #{content},
+                content = #{content}
             WHERE id = #{id}
             """)
     int update(Board board);
@@ -78,9 +87,18 @@ public interface BoardMapper {
     List<Integer> selectIdListByMemberId(String id);
 
     @Select("""
+            <script>
             SELECT COUNT(*) FROM board
-            WHERE title LIKE #{keyword}
-            OR content LIKe #{keyword}
+            WHERE 
+            <trim prefixOverrides="OR">
+                <if test="category == 'all' or category == 'title'"> 
+                    OR title LIKE #{keyword}
+                </if>
+                <if test="category == 'all' or category == 'content'">
+                    OR content LIKe #{keyword}
+                </if>
+            </trim>
+            </script>
             """)
-    int countAll(String keyword);
+    int countAll(String keyword, String category);
 }

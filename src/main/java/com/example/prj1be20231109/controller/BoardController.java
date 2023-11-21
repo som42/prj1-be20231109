@@ -50,9 +50,11 @@ public class BoardController {
     // /api/board/list?k=java
     @GetMapping("list")
     public Map<String, Object> list(@RequestParam(value = "p", defaultValue = "1") Integer page,
-                                    @RequestParam(value = "k", defaultValue = "") String keyword) {
+                                    @RequestParam(value = "k", defaultValue = "") String keyword,
+                                    @RequestParam(value = "c", defaultValue = "all") String category) {
+
         // 요청 넘어 왔으면 서비스에 일 시키면 된다.
-        return service.list(page, keyword);
+        return service.list(page, keyword, category);
     }
 
     @GetMapping("id/{id}")
