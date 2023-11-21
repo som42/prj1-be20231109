@@ -140,7 +140,11 @@ public class BoardService {
 
         //좋아요 레코드 지우기
         likeMapper.deleteByBoardId(id);
+
+        // 이미지 있는 게시물 지우기
+        fileMapper.deleteByBoardId(id);
         return mapper.deleteById(id) == 1;
+
     }
 
     public boolean update(Board board) {

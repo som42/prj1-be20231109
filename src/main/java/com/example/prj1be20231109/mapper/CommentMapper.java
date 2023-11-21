@@ -59,4 +59,5 @@ public interface CommentMapper {
         WHERE memberId = #{memberId}
         """)
     int deleteByMemberId(String memberId);
+
 }
